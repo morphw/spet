@@ -1,99 +1,40 @@
-'use client'
-
-import { useState } from 'react'
-
-const newspapers = [
-  { id: 1, date: 'февраль 2025', file: '#' },
-  { id: 2, date: 'февраль 2025', file: '#' },
-  { id: 3, date: 'февраль 2025', file: '#' },
-  { id: 4, date: 'февраль 2025', file: '#' },
-  { id: 5, date: 'февраль 2025', file: '#' },
-  { id: 6, date: 'февраль 2025', file: '#' },
-  { id: 7, date: 'февраль 2025', file: '#' },
-  { id: 8, date: 'февраль 2025', file: '#' },
-  { id: 9, date: 'февраль 2025', file: '#' },
-  { id: 10, date: 'февраль 2025', file: '#' },
-  { id: 11, date: 'февраль 2025', file: '#' },
-  { id: 12, date: 'февраль 2025', file: '#' },
-]
+﻿'use client';
 
 export default function NewspaperPage() {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0])
-    }
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Здесь будет логика загрузки файла
-    console.log('File submitted:', selectedFile)
-  }
-
   return (
-    <div className="min-h-screen pt-24 pb-16">
-      <div className="container mx-auto px-4">
+    <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold text-center mb-8">Газета "Мой СПЭТ"</h1>
+          <h1 className="text-4xl font-bold text-center mb-2 text-gray-800">Газета СПЭТ</h1>
+          <p className="text-center text-gray-600 mb-8 mt-8">Электронная газета "Мой СПЭТ"</p>
           
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Добавить новый выпуск</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="flex items-center space-x-4">
-                <input
-                  type="file"
-                  onChange={handleFileChange}
-                  className="block w-full text-sm text-gray-500
-                    file:mr-4 file:py-2 file:px-4
-                    file:rounded-md file:border-0
-                    file:text-sm file:font-semibold
-                    file:bg-blue-50 file:text-blue-700
-                    hover:file:bg-blue-100"
-                  accept=".pdf"
-                />
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                >
-                  Добавить газету
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-semibold mb-6">Архив выпусков</h2>
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
             <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Выпуск газеты, №
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Дата выпуска
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Файл
-                    </th>
+              <table className="min-w-full">
+                <thead>
+                  <tr className="bg-gradient-to-r from-blue-600 to-blue-700">
+                    <th className="px-6 py-4 text-white font-semibold text-sm">Выпуск газеты, №</th>
+                    <th className="px-6 py-4 text-white font-semibold text-sm">Дата выпуска</th>
+                    <th className="px-6 py-4 text-white font-semibold text-sm">Файл</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {newspapers.map((newspaper) => (
-                    <tr key={newspaper.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {newspaper.id}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {newspaper.date}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <a
-                          href={newspaper.file}
-                          className="text-blue-600 hover:text-blue-900"
+                <tbody className="divide-y divide-gray-200">
+                  {[...Array(12)].map((_, index) => (
+                    <tr key={index + 1} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4 text-center font-medium text-gray-700">{index + 1}</td>
+                      <td className="px-6 py-4 text-gray-600">февраль 2025</td>
+                      <td className="px-6 py-4">
+                        <a 
+                          href="#" 
+                          className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium transition-colors"
                         >
+                          <svg 
+                            className="w-4 h-4 mr-2" 
+                            fill="currentColor" 
+                            viewBox="0 0 20 20"
+                          >
+                            <path d="M10 12.586l4.293-4.293a1 1 0 011.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L10 12.586z"/>
+                          </svg>
                           Просмотр газеты
                         </a>
                       </td>
@@ -103,8 +44,35 @@ export default function NewspaperPage() {
               </table>
             </div>
           </div>
+
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">Добавить новый выпуск</h2>
+            <form className="flex flex-col sm:flex-row items-center gap-4">
+              <div className="w-full">
+                <input
+                  type="file"
+                  className="block w-full text-sm text-gray-500
+                    file:mr-4 file:py-3 file:px-4
+                    file:rounded-md file:border-0
+                    file:text-sm file:font-medium
+                    file:bg-blue-50 file:text-blue-700
+                    hover:file:bg-blue-100
+                    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 
+                  text-white font-medium rounded-md hover:from-blue-700 hover:to-blue-800 
+                  transition-all duration-200 shadow-md hover:shadow-lg
+                  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              >
+                Добавить газету
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
-  )
-} 
+    </main>
+  );
+}
