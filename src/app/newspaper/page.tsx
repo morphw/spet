@@ -1,6 +1,83 @@
 ﻿'use client';
 
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+interface NewspaperIssue {
+  id: number;
+  filename: string;
+  date: string;
+  path: string;
+}
+
+const newspaperIssues: NewspaperIssue[] = [
+  {
+    id: 2,
+    filename: "newspaper1.pdf",
+    date: "июнь 2025",
+    path: "/uploads/newspapers/newspaper1.pdf"
+  },
+  {
+    id: 1,
+    filename: "newspaper2.pdf",
+    date: "май 2025",
+    path: "/uploads/newspapers/newspaper2.pdf"
+  },
+];
+
 export default function NewspaperPage() {
+  const router = useRouter();
+  const [uploading, setUploading] = useState(false);
+  const [issues, setIssues] = useState<NewspaperIssue[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setIssues(newspaperIssues);
+  }, []);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+
+    setUploading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to upload file');
+      }
+
+      const data = await response.json();
+      
+      // Add new issue to the list
+      const newIssue: NewspaperIssue = {
+        id: issues.length + 1,
+        filename: data.filename,
+        date: new Date().toLocaleDateString('ru-RU'),
+        path: data.path
+      };
+
+      setIssues([...issues, newIssue]);
+    } catch (err) {
+      setError('Ошибка при загрузке файла. Пожалуйста, попробуйте снова.');
+      console.error('Upload error:', err);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleViewNewspaper = (path: string) => {
+    window.open(path, '_blank');
+  };
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <div className="container mx-auto px-4 py-12">
@@ -18,14 +95,14 @@ export default function NewspaperPage() {
                     <th className="px-6 py-4 text-white font-semibold text-sm">Файл</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {[...Array(12)].map((_, index) => (
-                    <tr key={index + 1} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 text-center font-medium text-gray-700">{index + 1}</td>
-                      <td className="px-6 py-4 text-gray-600">февраль 2025</td>
+                <tbody>
+                  {issues.map((issue) => (
+                    <tr key={issue.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4 text-center font-medium text-gray-700">{issue.id}</td>
+                      <td className="px-6 py-4 text-gray-600">{issue.date}</td>
                       <td className="px-6 py-4">
-                        <a 
-                          href="#" 
+                        <button 
+                          onClick={() => handleViewNewspaper(issue.path)}
                           className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium transition-colors"
                         >
                           <svg 
@@ -36,7 +113,7 @@ export default function NewspaperPage() {
                             <path d="M10 12.586l4.293-4.293a1 1 0 011.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L10 12.586z"/>
                           </svg>
                           Просмотр газеты
-                        </a>
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -45,32 +122,7 @@ export default function NewspaperPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Добавить новый выпуск</h2>
-            <form className="flex flex-col sm:flex-row items-center gap-4">
-              <div className="w-full">
-                <input
-                  type="file"
-                  className="block w-full text-sm text-gray-500
-                    file:mr-4 file:py-3 file:px-4
-                    file:rounded-md file:border-0
-                    file:text-sm file:font-medium
-                    file:bg-blue-50 file:text-blue-700
-                    hover:file:bg-blue-100
-                    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 
-                  text-white font-medium rounded-md hover:from-blue-700 hover:to-blue-800 
-                  transition-all duration-200 shadow-md hover:shadow-lg
-                  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-              >
-                Добавить газету
-              </button>
-            </form>
-          </div>
+
         </div>
       </div>
     </main>

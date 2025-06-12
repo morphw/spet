@@ -34,7 +34,7 @@ const Header = () => {
               <Link href="/applicants" className="text-gray-700 hover:text-blue-600">Абитуриентам</Link>
               <Link href="/students" className="text-gray-700 hover:text-blue-600">Студентам</Link>
               <Link href="/newspaper" className="text-gray-700 hover:text-blue-600">Газета "Мой СПЭТ"</Link>
-              <Link href="/news" className="text-gray-700 hover:text-blue-600">Новости</Link>
+              {/* <Link href="/news" className="text-gray-700 hover:text-blue-600">Новости</Link> */}
             </nav>
 
             <button
